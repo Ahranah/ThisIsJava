@@ -10,8 +10,7 @@ public class MapExample {
         studentList.add(new Student("홍길동", 92));
         studentList.add(new Student("홍길동", 87));
         //Student 스트림을 score 스트림으로 변환하여 요소 출력
-        IntStream<Student> score = studentList.stream()
-                        .mapToInt(s -> s.getScore())
-                        .forEach(System.out::println);
+        IntStream score = studentList.stream()
+                        .mapToInt(Student::getScore);
     }
 }
