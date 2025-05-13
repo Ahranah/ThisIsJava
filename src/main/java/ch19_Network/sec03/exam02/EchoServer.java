@@ -1,13 +1,11 @@
-package ch19_Network.sec03.exam01;
+package ch19_Network.sec03.exam02;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.InetAddress;
-import java.io.*;
 
-public class ServerExample {
+public class EchoServer {
     private static ServerSocket serverSocket = null;
 
     public static void main(String[] args) throws IOException {
@@ -38,7 +36,7 @@ public class ServerExample {
                     serverSocket = new ServerSocket(50001);
                     System.out.println("Server started on port: " + serverSocket.getLocalPort());
 
-                    while(true) {
+                    while (true) {
                         System.out.println("Waiting for connection...");
                         // accept connection
                         Socket socket = serverSocket.accept();
@@ -48,6 +46,22 @@ public class ServerExample {
 
                         System.out.println("Connected to " + address.getHostName()
                                 + "(" + address.getHostString() + ")" + " :" + address.getPort());
+
+                        // ------------------------- //
+
+                        // receive data
+                        DataInputStream dis = new DataInputStream(socket.getInputStream());
+                        // byte[string encoding with UTF-8]
+                        String message = dis.readUTF();
+                        System.out.println("Message received: " + message);
+
+                        // send data
+                        DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+                        dos.writeUTF(message);
+                        dos.flush();
+                        System.out.println("Message sent: " + message);
+
+                        // ------------------------- //
 
                         // quit connection
                         socket.close();
@@ -69,6 +83,8 @@ public class ServerExample {
             // close serverSocket and unbind
             serverSocket.close();
             System.out.println("Server stopped.");
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 }
+
